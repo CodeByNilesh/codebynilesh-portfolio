@@ -1,0 +1,151 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}{{ project.title }} - CodeByNilesh{% endblock %}
+
+{% block content %}
+<!-- Project Hero -->
+<section class="hero-section" style="min-height: 50vh;">
+    <div class="container">
+        <div class="text-center" data-aos="fade-up">
+            {% if project.featured %}
+            <span class="badge bg-warning text-dark mb-3" style="font-size: 1rem; padding: 10px 20px;">
+                <i class="fas fa-star"></i> Featured Project
+            </span>
+            {% endif %}
+            <h1 class="display-4 text-white mb-3">{{ project.title }}</h1>
+            <p class="lead text-white-50">
+                <i class="fas fa-calendar"></i> {{ project.created_at|date:"F d, Y" }}
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Project Details -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Project Image & Description -->
+            <div class="col-lg-8 mb-4">
+                <!-- Main Image -->
+                <div class="card mb-4" data-aos="fade-right">
+                    {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="card-img-top" style="width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 400px;">
+                        <i class="fas fa-image fa-5x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Description -->
+                <div class="card" data-aos="fade-right" data-aos-delay="100">
+                    <div class="card-body">
+                        <h3 class="mb-4">
+                            <i class="fas fa-info-circle text-primary"></i> Project Description
+                        </h3>
+                        <p class="lead" style="line-height: 1.8;">{{ project.description }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Technologies -->
+                <div class="card mb-4" data-aos="fade-left">
+                    <div class="card-body">
+                        <h5 class="mb-3">
+                            <i class="fas fa-tools text-primary"></i> Technologies Used
+                        </h5>
+                        <div>
+                            {% for tech in project.get_technologies_list %}
+                                <span class="tech-badge mb-2" style="display: inline-block;">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Links -->
+                <div class="card mb-4" data-aos="fade-left" data-aos-delay="100">
+                    <div class="card-body">
+                        <h5 class="mb-3">
+                            <i class="fas fa-link text-primary"></i> Project Links
+                        </h5>
+                        
+                        {% if project.github_link %}
+                        <a href="{{ project.github_link }}" target="_blank" class="btn btn-dark w-100 mb-2">
+                            <i class="fab fa-github me-2"></i> View on GitHub
+                        </a>
+                        {% endif %}
+                        
+                        {% if project.live_link %}
+                        <a href="{{ project.live_link }}" target="_blank" class="btn btn-gradient w-100 mb-2">
+                            <i class="fas fa-external-link-alt me-2"></i> Live Demo
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'projects' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Projects
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Project Info -->
+                <div class="card" data-aos="fade-left" data-aos-delay="200">
+                    <div class="card-body">
+                        <h5 class="mb-3">
+                            <i class="fas fa-chart-bar text-primary"></i> Project Info
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">Status</small>
+                            {% if project.featured %}
+                            <span class="badge bg-success">Featured</span>
+                            {% else %}
+                            <span class="badge bg-primary">Active</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">Created</small>
+                            <strong>{{ project.created_at|date:"F d, Y" }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Projects -->
+        {% if related_projects %}
+        <div class="mt-5">
+            <h3 class="mb-4" data-aos="fade-up">
+                <i class="fas fa-project-diagram text-primary"></i> Related Projects
+            </h3>
+            <div class="row">
+                {% for related in related_projects %}
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                    <div class="card h-100">
+                        <div style="overflow: hidden;">
+                            {% if related.image %}
+                            <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.title }}" style="height: 200px; object-fit: cover;">
+                            {% else %}
+                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ related.title }}</h5>
+                            <p class="card-text">{{ related.description|truncatewords:15 }}</p>
+                            <a href="{% url 'project_detail' related.slug %}" class="btn btn-gradient btn-sm">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

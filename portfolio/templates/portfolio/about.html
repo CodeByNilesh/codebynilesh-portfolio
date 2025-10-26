@@ -1,0 +1,157 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}About - CodeByNilesh{% endblock %}
+
+{% block content %}
+<!-- About Hero -->
+<section class="hero-section" style="min-height: 60vh;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 text-center mb-4 mb-lg-0" data-aos="fade-right">
+                {% if about.profile_image %}
+                    <img src="{{ about.profile_image.url }}" alt="{{ about.name }}" 
+                         style="width: 300px; height: 300px; object-fit: cover; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); border: 5px solid rgba(255,255,255,0.2);">
+                {% endif %}
+            </div>
+            <div class="col-lg-7" data-aos="fade-left">
+                <h1 class="display-4 text-white mb-3">About Me</h1>
+                <h3 class="mb-4" style="background: linear-gradient(135deg, #667eea 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2rem; font-weight: 700;">{{ about.title }}</h3>
+                <p class="lead text-white-50">{{ about.description }}</p>
+                
+                <div class="mt-4">
+                    <div class="glass-card d-inline-block me-3 mb-3">
+                        <i class="fas fa-envelope text-white me-2"></i>
+                        <span class="text-white">{{ about.email }}</span>
+                    </div>
+                    {% if about.phone %}
+                    <div class="glass-card d-inline-block me-3 mb-3">
+                        <i class="fas fa-phone text-white me-2"></i>
+                        <span class="text-white">{{ about.phone }}</span>
+                    </div>
+                    {% endif %}
+                    {% if about.location %}
+                    <div class="glass-card d-inline-block mb-3">
+                        <i class="fas fa-map-marker-alt text-white me-2"></i>
+                        <span class="text-white">{{ about.location }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if about.resume %}
+                <div class="mt-4">
+                    <a href="{{ about.resume.url }}" class="btn btn-gradient" download>
+                        <i class="fas fa-download"></i> Download Resume
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center w-100" data-aos="fade-up">
+            <i class="fas fa-code"></i> Technical Skills
+        </h2>
+        <div class="row mt-5">
+            {% for skill in skills %}
+            <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span><i class="{{ skill.icon }} me-2"></i>{{ skill.name }}</span>
+                        <span class="badge bg-primary">{{ skill.get_level_display }}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ skill.percentage }}%">
+                            {{ skill.percentage }}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Experience Section -->
+{% if experiences %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center w-100" data-aos="fade-up">
+            <i class="fas fa-briefcase"></i> Work Experience
+        </h2>
+        <div class="row mt-5">
+            <div class="col-lg-10 mx-auto">
+                {% for exp in experiences %}
+                <div class="card mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-3">
+                            <div>
+                                <h5 class="mb-1"><i class="fas fa-user-tie text-primary me-2"></i>{{ exp.position }}</h5>
+                                <h6 class="text-primary mb-2">{{ exp.company }}</h6>
+                                {% if exp.location %}
+                                <p class="text-muted small mb-0">
+                                    <i class="fas fa-map-marker-alt me-1"></i>{{ exp.location }}
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <span class="badge bg-primary">
+                                    {{ exp.start_date|date:"M Y" }} - 
+                                    {% if exp.currently_working %}
+                                        <span class="badge bg-success ms-1">Present</span>
+                                    {% else %}
+                                        {{ exp.end_date|date:"M Y" }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <p class="card-text">{{ exp.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Education Section -->
+{% if education %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center w-100" data-aos="fade-up">
+            <i class="fas fa-graduation-cap"></i> Education
+        </h2>
+        <div class="row mt-5">
+            <div class="col-lg-10 mx-auto">
+                {% for edu in education %}
+                <div class="card mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-3">
+                            <div>
+                                <h5 class="mb-1"><i class="fas fa-book text-primary me-2"></i>{{ edu.degree }}</h5>
+                                <h6 class="text-primary mb-2">{{ edu.institution }}</h6>
+                                <p class="text-muted mb-0">{{ edu.field_of_study }}</p>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-primary mb-2">
+                                    {{ edu.start_date|date:"Y" }} - 
+                                    {% if edu.end_date %}{{ edu.end_date|date:"Y" }}{% else %}Present{% endif %}
+                                </span>
+                                {% if edu.grade %}
+                                <p class="mb-0 small"><strong>Grade:</strong> {{ edu.grade }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

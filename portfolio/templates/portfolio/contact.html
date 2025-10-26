@@ -1,0 +1,112 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}Contact - CodeByNilesh{% endblock %}
+
+{% block content %}
+<!-- Contact Hero -->
+<section class="hero-section" style="min-height: 50vh;">
+    <div class="container">
+        <div class="text-center" data-aos="fade-up">
+            <h1 class="display-4 text-white mb-3">
+                <i class="fas fa-envelope"></i> Get In Touch
+            </h1>
+            <p class="lead text-white-50">Let's discuss your next project</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Contact Info -->
+            <div class="col-lg-5 mb-4" data-aos="fade-right">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="mb-4"><i class="fas fa-info-circle text-primary"></i> Contact Information</h3>
+                        
+                        {% if about %}
+                        <div class="mb-4">
+                            <h6 class="text-muted mb-2">Email</h6>
+                            <p class="h6">
+                                <i class="fas fa-envelope text-primary me-2"></i>
+                                <a href="mailto:{{ about.email }}" class="text-decoration-none">{{ about.email }}</a>
+                            </p>
+                        </div>
+                        
+                        {% if about.phone %}
+                        <div class="mb-4">
+                            <h6 class="text-muted mb-2">Phone</h6>
+                            <p class="h6">
+                                <i class="fas fa-phone text-primary me-2"></i>
+                                <a href="tel:{{ about.phone }}" class="text-decoration-none">{{ about.phone }}</a>
+                            </p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if about.location %}
+                        <div class="mb-4">
+                            <h6 class="text-muted mb-2">Location</h6>
+                            <p class="h6">
+                                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                {{ about.location }}
+                            </p>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        
+                        <!-- Social Links -->
+                        <div class="mt-5">
+                            <h6 class="text-muted mb-3">Follow Me</h6>
+                            <div class="social-links" style="display: flex; gap: 15px;">
+                                {% for social in social_links %}
+                                <a href="{{ social.url }}" target="_blank" style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+                                    <i class="{{ social.icon }}"></i>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="col-lg-7" data-aos="fade-left">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="mb-4"><i class="fas fa-paper-plane text-primary"></i> Send Message</h3>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Your Name *</label>
+                                {{ form.name }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Your Email *</label>
+                                {{ form.email }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Subject *</label>
+                                {{ form.subject }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Message *</label>
+                                {{ form.message }}
+                            </div>
+                            
+                            <button type="submit" class="btn btn-gradient btn-lg w-100">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
