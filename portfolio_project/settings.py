@@ -104,3 +104,11 @@ if 'DATABASE_URL' in os.environ:
         conn_max_age=600,
         conn_health_checks=True,
     )
+
+
+
+# Get PORT from environment (Railway provides this)
+PORT = os.environ.get('PORT', 8000)
+
+# Update ALLOWED_HOSTS for Railway
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
