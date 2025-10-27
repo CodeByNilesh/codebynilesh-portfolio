@@ -95,39 +95,25 @@ def contact(request):
     }
     return render(request, 'portfolio/contact.html', context)
 
-# Add at the END of portfolio/views.py
-
+# TEMPORARY - DELETE AFTER USE
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-def setup_admin(request):
-    """Auto-create admin user - DELETE AFTER FIRST USE"""
-    username = 'admin'
-    password = 'Admin123'
+def fix_admin(request):
+    username = 'superadmin'
+    password = 'Super@123'
     email = 'admin@example.com'
     
     if User.objects.filter(username=username).exists():
-        user = User.objects.get(username=username)
-        return HttpResponse(f'''
-            <h2>✅ Admin user already exists!</h2>
-            <p><strong>Username:</strong> {username}</p>
-            <p><strong>Password:</strong> {password}</p>
-            <a href="/admin/">Go to Admin Panel</a>
-            <hr>
-            <p style="color: red;">⚠️ DELETE the setup_admin view from code NOW for security!</p>
-        ''')
+        return HttpResponse(f'User exists! Login with username: {username}, password: {password}<br><a href="/admin/">Go to Admin</a>')
     
-    # Create superuser
-    User.objects.create_superuser(username=username, email=email, password=password)
-    
+    User.objects.create_superuser(username, email, password)
     return HttpResponse(f'''
-        <h2>🎉 Admin user created successfully!</h2>
+        <h2>✅ New admin created!</h2>
         <p><strong>Username:</strong> {username}</p>
         <p><strong>Password:</strong> {password}</p>
         <br>
-        <a href="/admin/" style="background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
-            Go to Admin Panel →
-        </a>
+        <a href="/admin/" style="background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none;">Login Now</a>
         <hr>
-        <p style="color: red; font-weight: bold;">⚠️ IMPORTANT: Delete the setup_admin view from your code NOW!</p>
+        <p style="color: red;">⚠️ DELETE this view after login!</p>
     ''')
