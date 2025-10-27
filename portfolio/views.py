@@ -94,26 +94,3 @@ def contact(request):
         'social_links': social_links,
     }
     return render(request, 'portfolio/contact.html', context)
-
-# TEMPORARY - DELETE AFTER USE
-from django.http import HttpResponse
-from django.contrib.auth.models import User
-
-def fix_admin(request):
-    username = 'superadmin'
-    password = 'Super@123'
-    email = 'admin@example.com'
-    
-    if User.objects.filter(username=username).exists():
-        return HttpResponse(f'User exists! Login with username: {username}, password: {password}<br><a href="/admin/">Go to Admin</a>')
-    
-    User.objects.create_superuser(username, email, password)
-    return HttpResponse(f'''
-        <h2>✅ New admin created!</h2>
-        <p><strong>Username:</strong> {username}</p>
-        <p><strong>Password:</strong> {password}</p>
-        <br>
-        <a href="/admin/" style="background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none;">Login Now</a>
-        <hr>
-        <p style="color: red;">⚠️ DELETE this view after login!</p>
-    ''')

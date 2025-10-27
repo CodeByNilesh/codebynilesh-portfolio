@@ -7,6 +7,5 @@ urlpatterns = [
     path('projects/', views.projects, name='projects'),
     path('project/<slug:slug>/', views.project_detail, name='project_detail'),
     path('certifications/', views.certifications, name='certifications'),  # NEW
-    path('contact/', views.contact, name='contact'),
-    path('fix-login/', views.fix_admin),  # TEMPORARY
+    path('contact/', views.contact, name='contact')
 ]
