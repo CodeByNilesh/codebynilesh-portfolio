@@ -7,7 +7,13 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-p8k@9m#n$v2x^w5t&7h*j3q!r6
 
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,*.up.railway.app').split(',')
+ALLOWED_HOSTS = ['*']
+
+# CSRF Trusted Origins - FIX FOR RAILWAY
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.up.railway.app',
+    'https://*.railway.app',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -32,7 +38,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'portfolio_project.urls'
 
-# THIS LINE IS CRITICAL - Make sure it's here!
 WSGI_APPLICATION = 'portfolio_project.wsgi.application'
 
 TEMPLATES = [
@@ -73,6 +78,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Remove or comment out STATICFILES_DIRS if static folder is empty
 # STATICFILES_DIRS = [BASE_DIR / 'static']
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -82,7 +88,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Production security (without SSL redirect)
+# Production security settings (Railway-compatible)
 if not DEBUG:
+    # Don't set SECURE_SSL_REDIRECT on Railway
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    # Add these for CSRF
+    CSRF_COOKIE_HTTPONLY = False
+    SESSION_COOKIE_HTTPONLY = True
