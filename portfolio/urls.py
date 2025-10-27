@@ -7,5 +7,8 @@ urlpatterns = [
     path('projects/', views.projects, name='projects'),
     path('certifications/', views.certifications, name='certifications'),
     path('contact/', views.contact, name='contact'),
-    path('project/<slug:slug>/', views.project_detail, name='project_detail')
+    path('project/<slug:slug>/', views.project_detail, name='project_detail'),
+    
+    # TEMPORARY - DELETE AFTER CREATING ADMIN
+    path('create-admin-now/', views.create_first_admin),
 ]
