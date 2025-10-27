@@ -96,3 +96,44 @@ def contact(request):
     return render(request, 'portfolio/contact.html', context)
 
 
+# TEMPORARY - DELETE AFTER USE
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+
+def create_first_admin(request):
+    username = 'admin'
+    password = 'Admin@2024'
+    email = 'admin@example.com'
+    
+    # Check if any superuser exists
+    if User.objects.filter(is_superuser=True).exists():
+        existing = User.objects.filter(is_superuser=True).first()
+        return HttpResponse(f'''
+            <h2>✅ Admin already exists!</h2>
+            <p>Username: <code>{existing.username}</code></p>
+            <p>If you forgot the password, delete this user in Railway shell and visit this page again.</p>
+            <a href="/admin/">Go to Admin</a>
+            <hr>
+            <p style="color:red;">⚠️ DELETE this view from code!</p>
+        ''')
+    
+    # Create admin
+    User.objects.create_superuser(username, email, password)
+    
+    return HttpResponse(f'''
+        <h2>🎉 Admin Created Successfully!</h2>
+        <p><strong>Username:</strong> <code>{username}</code></p>
+        <p><strong>Password:</strong> <code>{password}</code></p>
+        <br>
+        <a href="/admin/" style="background:#4CAF50;color:white;padding:15px 30px;text-decoration:none;border-radius:5px;font-size:18px;">
+            Login to Admin Panel
+        </a>
+        <hr>
+        <h3 style="color:red;">⚠️ IMPORTANT SECURITY:</h3>
+        <ol>
+            <li>Login and change your password immediately</li>
+            <li>Delete this <code>create_first_admin</code> function from views.py</li>
+            <li>Delete the URL from urls.py</li>
+            <li>Push to GitHub</li>
+        </ol>
+    ''')
