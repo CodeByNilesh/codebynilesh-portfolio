@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -9,7 +10,6 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
-# CSRF Trusted Origins - FIX FOR RAILWAY
 CSRF_TRUSTED_ORIGINS = [
     'https://*.up.railway.app',
     'https://*.railway.app',
@@ -57,12 +57,27 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASE CONFIGURATION - FIXED FOR RAILWAY
+# Use PostgreSQL on Railway, SQLite locally
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+if DATABASE_URL:
+    # Production: Use Railway PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    # Local development: Use SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -78,9 +93,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-# Remove or comment out STATICFILES_DIRS if static folder is empty
-# STATICFILES_DIRS = [BASE_DIR / 'static']
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
@@ -88,11 +100,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Production security settings (Railway-compatible)
+# Production security
 if not DEBUG:
-    # Don't set SECURE_SSL_REDIRECT on Railway
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    # Add these for CSRF
     CSRF_COOKIE_HTTPONLY = False
     SESSION_COOKIE_HTTPONLY = True
