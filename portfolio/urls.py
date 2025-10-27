@@ -9,6 +9,4 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('project/<slug:slug>/', views.project_detail, name='project_detail'),
     
-    # EMERGENCY - DELETE AFTER USE
-    path('reset-admin-emergency/', views.reset_admin_now),
 ]
