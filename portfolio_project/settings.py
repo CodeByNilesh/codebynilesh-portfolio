@@ -22,8 +22,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary_storage',  # Must be before cloudinary
-    'cloudinary',
     'portfolio',
 ]
 
@@ -59,13 +57,27 @@ TEMPLATES = [
     },
 ]
 
-# Database - Use SQLite (simpler for now)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASE CONFIGURATION - FIXED FOR RAILWAY
+# Use PostgreSQL on Railway, SQLite locally
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+if DATABASE_URL:
+    # Production: Use Railway PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    # Local development: Use SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -79,24 +91,12 @@ TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# CLOUDINARY CONFIGURATION - Keep at the end!
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dctbj7hdj',
-    'API_KEY': '199472457426866',
-    'API_SECRET': 'HfSOuZZXpHnIPh8wpEx6JFuPm6c'
-}
-
-# Media files - Cloudinary
-MEDIA_URL = '/media/'  # This is still needed for URL generation
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# DON'T set MEDIA_ROOT when using Cloudinary - remove this line!
-# MEDIA_ROOT = BASE_DIR / 'media'  ← REMOVED
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
